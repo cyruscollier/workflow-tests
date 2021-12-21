@@ -12,7 +12,6 @@ jobs:
       - uses: actions/checkout@v2
       - name: Parse All Secrets
         run: |
-          SECRETS=${{ toJson(secrets) }}
+          SECRETS="${{ toJson(secrets) }}"
           echo $SECRETS
-          $( echo "$SECRETS" | jq -r 'keys[] as $k | "export \($k)=\(.[$k])" >> .env' )
-          cat .env
+          $( echo "$SECRETS" | jq -r 'keys[] as $k | "\($k)=\(.[$k])"' )
