@@ -11,7 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Parse All Secrets
-        run: |
-          SECRETS="${{ toJson(secrets) }}"
-          echo $SECRETS
-          $( echo "$SECRETS" | jq -r 'keys[] as $k | "\($k)=\(.[$k])"' )
+        run: jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' <<< "$secrets" > .env
+        env:
+          secrets: ${{ toJson(secrets) }}
+      - name: Display env file
+        run: cat .env
