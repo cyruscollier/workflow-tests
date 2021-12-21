@@ -13,5 +13,6 @@ jobs:
       - name: Parse All Secrets
         run: |
           SECRETS="$${ toJson(secrets) }}"
-          $( echo "$values" | jq -r 'keys[] as $k | "export \($k)=\(.[$k])" >> .env' )
+          echo $SECRETS
+          $( echo "$SECRETS" | jq -r 'keys[] as $k | "export \($k)=\(.[$k])" >> .env' )
           cat .env
